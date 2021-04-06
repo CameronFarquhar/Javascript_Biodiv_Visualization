@@ -1,0 +1,4 @@
+// Fetch the JSON data and console log it
+d3.json("samples.json").then(function(data) {
+  console.log(data.samples[0].sample_values);
+});
