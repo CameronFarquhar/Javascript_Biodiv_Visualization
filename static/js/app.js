@@ -1,12 +1,33 @@
 
+function optionChanged(id){
+  buildPlot(id);
+  demographics(id);
+};
+
+function init() {
+  d3.json("static/js/samples.json").then((data)=> {
+
+      data.names.forEach((name) => {
+          d3.select("#selDataset")
+          .append("option")
+          .text(name)
+          .property("value");
+      });
+      buildPlot(data.names[0]);
+      demographics(data.names[0]);
+  });
+};
 
 function demographics(id){
   d3.json("static/js/samples.json").then(function(data) {
     var metadata =  data.metadata;
     console.log(metadata);
+
     var panel = d3.select("#sample-metadata");
+
     var filteredInput = metadata.filter(results => results.id.toString() === id)[0];
     console.log(filteredInput)
+
     panel.html("");
 
     Object.entries(filteredInput).forEach((key)=> {
@@ -21,6 +42,7 @@ function buildPlot(id) {
   d3.json("static/js/samples.json").then(function(data) {
 
   var filteredSample = data.samples.filter(sample => sample.id === id)[0];
+  console.log(filteredSample)
 
   var sampleValues = filteredSample.sample_values;
 
@@ -96,28 +118,7 @@ var layout = {
 };
 
 Plotly.newPlot('bubble', data, layout);
-
-
 });}
 
-
-function init() {
-
-  d3.json("samples.json").then((data)=> {
-
-      data.names.forEach((name) => {
-          d3.select("#selDataset")
-          .append("option")
-          .text(name)
-          .property("value");
-      });
-      buildPlot(data.names[0]);
-      demographics(data.names[0]);
-  });
-};
 init();
 
-function optionChanged(id){
-  buildPlot(id);
-  demographics(id);
-};
