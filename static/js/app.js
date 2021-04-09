@@ -6,13 +6,14 @@ function optionChanged(id){
 
 function init() {
   d3.json("static/js/samples.json").then((data)=> {
-
+      // loop through names object and grab all the ids and eppend them to demographics dropdown
       data.names.forEach((name) => {
           d3.select("#selDataset")
           .append("option")
           .text(name)
           .property("value");
       });
+      // apply the ids to the other functions
       buildPlot(data.names[0]);
       demographics(data.names[0]);
   });
@@ -20,19 +21,23 @@ function init() {
 
 function demographics(id){
   d3.json("static/js/samples.json").then(function(data) {
+    // assign variable path to metadata
     var metadata =  data.metadata;
     console.log(metadata);
 
+    // tell JS where you want to put the new list of elements
     var panel = d3.select("#sample-metadata");
 
+    // filtered metadata by selected id so you grab only the object that matches the id
     var filteredInput = metadata.filter(results => results.id.toString() === id)[0];
     console.log(filteredInput)
 
+    // clear out the panel upon new entry
     panel.html("");
 
+    // loop through each key and append them to the panel
     Object.entries(filteredInput).forEach((key)=> {
       panel.append("li").text(key[0] + ": " + key[1]);
-    
     });
   });
 }
@@ -41,16 +46,18 @@ function demographics(id){
 function buildPlot(id) {
   d3.json("static/js/samples.json").then(function(data) {
 
+    // filter the sample object by id
   var filteredSample = data.samples.filter(sample => sample.id === id)[0];
   console.log(filteredSample)
 
+// assign variables to each of the 3 fields
   var sampleValues = filteredSample.sample_values;
 
   var sampleIDs = filteredSample.otu_ids;
   
   var sampleLabels = filteredSample.otu_labels;
 
-
+// find the top 10 and reverse
   var valuesSlice = sampleValues.slice(0, 10);
 
   var IDslice = sampleIDs.slice(0, 10);
@@ -61,6 +68,7 @@ function buildPlot(id) {
 
   var sampleID = IDslice.reverse();
 
+  // create a list to hold ID names and and OTU in front
   const name = []
 
   sampleID.forEach(element => {
@@ -111,7 +119,6 @@ var trace1 = {
 var data = [trace1];
 
 var layout = {
-  title: 'Marker Size and Color',
   showlegend: false,
   height: 600,
   width: 1000
