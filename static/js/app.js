@@ -1,13 +1,3 @@
-// Fetch the JSON data
-
-// @param {array} rows
-// @param {integer} index
-
-// function unpack(rows, index) {
-//   return rows.map(function(row) {
-//     return row[index];
-//   });
-// }
 
 
 function demographics(id){
@@ -16,34 +6,28 @@ function demographics(id){
     console.log(metadata);
     var panel = d3.select("#sample-metadata");
     var filteredInput = metadata.filter(results => results.id.toString() === id)[0];
+    console.log(filteredInput)
     panel.html("");
+
+    Object.entries(filteredInput).forEach((key)=> {
+      panel.append("li").text(key[0] + ": " + key[1]);
     
-    Object.defineProperties(filteredInput).forEach((key)=> {
-      panel.append("ul").text(key[0] + ": " + key[1]);
     });
   });
 }
 
-demographics();
 
-
-function buildPlot() {
+function buildPlot(id) {
   d3.json("static/js/samples.json").then(function(data) {
-  // console.log(data);
-  // var metadataID = data.metadata[0].id;
-  // console.log(metadataID);
 
+  var filteredSample = data.samples.filter(sample => sample.id === id)[0];
 
+  var sampleValues = filteredSample.sample_values;
 
-  var sampleIndZero = data.samples[0];
-
-  var sampleValues = sampleIndZero.sample_values;
-
-  var sampleIDs = sampleIndZero.otu_ids;
+  var sampleIDs = filteredSample.otu_ids;
   
-  console.log(sampleIndZero)
-  
-  var sampleLabels = sampleIndZero.otu_labels;
+  var sampleLabels = filteredSample.otu_labels;
+
 
   var valuesSlice = sampleValues.slice(0, 10);
 
@@ -116,4 +100,24 @@ Plotly.newPlot('bubble', data, layout);
 
 });}
 
-buildPlot();
+
+function init() {
+
+  d3.json("samples.json").then((data)=> {
+
+      data.names.forEach((name) => {
+          d3.select("#selDataset")
+          .append("option")
+          .text(name)
+          .property("value");
+      });
+      buildPlot(data.names[0]);
+      demographics(data.names[0]);
+  });
+};
+init();
+
+function optionChanged(id){
+  buildPlot(id);
+  demographics(id);
+};
