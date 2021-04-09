@@ -19,7 +19,7 @@ d3.json("samples.json").then(function(data) {
 
   var sampleID = IDslice.reverse();
 
-  var name = []
+  const name = []
 
   sampleID.forEach(element => {
     name.push(` OTU_ID: ${element}`);
@@ -53,6 +53,29 @@ d3.json("samples.json").then(function(data) {
   // Render the plot to the div tag with id "plot"
   Plotly.newPlot("bar", chartData, layout);
 
-});
 
 // d3.selectAll("#selDataset").on("change", updatePlotly);
+
+var trace1 = {
+  x: sampleIDs,
+  y: sampleValues,
+  text: sampleLabels,
+  mode: 'markers',
+  marker: {
+    color: sampleIDs,
+    size: sampleValues
+  }
+};
+
+var data = [trace1];
+
+var layout = {
+  title: 'Marker Size and Color',
+  showlegend: false,
+  height: 600,
+  width: 1000
+};
+
+Plotly.newPlot('bubble', data, layout);
+
+});
