@@ -1,4 +1,4 @@
-// Fetch the JSON data and console log it
+// Fetch the JSON data
 d3.json("samples.json").then(function(data) {
 
   var sampleIndZero = data.samples[0];
@@ -6,7 +6,8 @@ d3.json("samples.json").then(function(data) {
   var sampleValues = sampleIndZero.sample_values;
 
   var sampleIDs = sampleIndZero.otu_ids;
-
+  console.log(sampleIndZero)
+  
   var sampleLabels = sampleIndZero.otu_labels;
 
   var valuesSlice = sampleValues.slice(0, 10);
@@ -25,8 +26,8 @@ d3.json("samples.json").then(function(data) {
     name.push(` OTU_ID: ${element}`);
   });
 
-  console.log(name)
 
+  // Bar Chart
   var trace1 = {
     x: sampleValue,
     y: name,
@@ -36,7 +37,6 @@ d3.json("samples.json").then(function(data) {
     orientation: "h"
   };
 
-  // data
   var chartData = [trace1];
 
   // Apply the group bar mode to the layout
@@ -54,7 +54,9 @@ d3.json("samples.json").then(function(data) {
   Plotly.newPlot("bar", chartData, layout);
 
 
-// d3.selectAll("#selDataset").on("change", updatePlotly);
+
+
+// Bubble plot
 
 var trace1 = {
   x: sampleIDs,
@@ -77,5 +79,60 @@ var layout = {
 };
 
 Plotly.newPlot('bubble', data, layout);
+
+var idNum = sampleIndZero.id;
+console.log(idNum);
+
+// d3.append("ul").text(idNum);
+
+// var wfreqNum = data.metadata[0];
+
+// console.log(wfreqNum);
+
+// part of data to input
+// var traceGauge = {
+//   type: 'pie',
+//   showlegend: false,
+//   hole: 0.4,
+//   rotation: 90,
+//   values: [ 81/9, 81/9, 81/9, 81/9, 81/9, 81/9, 81/9, 81/9, 81/9, 81],
+//   text: ['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9'],
+//   direction: 'clockwise',
+//   textinfo: 'text',
+//   textposition: 'inside',
+//   marker: {
+//     colors: ['','','','','','','','','','white'],
+//     labels: ['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9'],
+//     hoverinfo: 'label'
+//   }
+// }
+
+// // needle
+// var degrees = 50, radius = .9
+// var radians = degrees * Math.PI / 180
+// var x = -1 * radius * Math.cos(radians) * wfreqNum
+// var y = radius * Math.sin(radians)
+
+// var gaugeLayout = {
+//   shapes: [{
+//     type: 'line',
+//     x0: 0.5,
+//     y0: 0.5,
+//     x1: 0.6,
+//     y1: 0.6,
+//     line: {
+//       color: 'black',
+//       width: 3
+//     }
+//   }],
+//   title: 'Chart',
+//   xaxis: {visible: false, range: [-1, 1]},
+//   yaxis: {visible: false, range: [-1, 1]}
+// }
+
+// var dataGauge = [traceGauge]
+
+// Plotly.plot('gauge', dataGauge, gaugeLayout)
+
 
 });
