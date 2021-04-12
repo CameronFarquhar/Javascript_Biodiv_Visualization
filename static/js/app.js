@@ -7,7 +7,7 @@ function init() {
           .text(name)
           .property("value");
       });
-      // apply an ID for the intial plot
+      // apply an ID for the intial plots
       buildPlot(data.names[0]);
       demographics(data.names[0]);
       gaugePlot(data.names[0]);
@@ -93,12 +93,6 @@ function buildPlot(id) {
     title: "Top 10 samples",
     height: 600,
     width: 500
-    // margin: {
-    //   l: 100,
-    //   r: 100,
-    //   t: 100,
-    //   b: 100
-    // }
   };
 
   // Render the plot to the div tag with id "plot"
@@ -114,7 +108,8 @@ var trace1 = {
   mode: 'markers',
   marker: {
     color: sampleIDs,
-    size: sampleValues
+    size: sampleValues,
+    colorscale: "Earth"
   }
 };
 
@@ -133,37 +128,10 @@ Plotly.newPlot('bubble', data, layout);
 function gaugePlot(id){
   d3.json("static/js/samples.json").then(function(data) {
 
-
+    // find the object that matches the id entered then grab the list with [0] and identify the value of the key with wfreq.
+    
     var wFreq = data.metadata.filter(data => data.id.toString() === id)[0].wfreq;
     console.log(wFreq);
-
-    // var data = [
-    //   {
-    //     type: "indicator",
-    //     value: wFreq,
-    //     // delta: { reference: 10 },
-    //     gauge: { axis: { visible: true, range: [0, 10] } },
-    //     domain: { row: 0, column: 0}
-    //   }]
-    
-    //   var layout = {
-    //     width: 800,
-    //     height: 400,
-    //     // margin: { t: 100, b: 80},
-    //     grid: { rows: 1, columns: 2, pattern: "independent" },
-    //     template: {
-    //       data: {
-    //         indicator: [
-    //           {
-    //             title: { text: "Scrubs Per Week" },
-    //             mode: "number+delta+gauge"
-    //             // delta: { reference: 90 }
-    //           }]
-    //       }
-    //     }
-    //     // paper_bgcolor: "lavender",
-    //     // font: { color: "darkblue", family: "Arial" }
-    //   };
 
     var data = [
       {
@@ -172,12 +140,12 @@ function gaugePlot(id){
         title: { text: "Scrubs Per Week"},
         type: "indicator",
         mode: "gauge+number",
-        // delta: { reference: 380 },
         gauge: {
-          axis: { range: [null, 10] },
+          axis: { range: [null, 10], color: "blue" },
+          bar: { color: "rgb(0,30,110)", thickness: 0.25 },
           steps: [
             { range: [0, 1], color: "rgba(0, 150, 50, 0.1)"},
-            { range: [1, 2], color: "rgba(0, 150, 50, 0.2)d" },
+            { range: [1, 2], color: "rgba(0, 150, 50, 0.2)" },
             { range: [2, 3], color: "rgba(0, 150, 50, 0.3)" },
             { range: [3, 4], color: "rgba(0, 150, 50, 0.4)" },
             { range: [4, 5], color: "rgba(0, 150, 50, 0.5)" },
@@ -188,22 +156,18 @@ function gaugePlot(id){
             { range: [9, 10], color: "rgba(0, 150, 50, 1)" }
           ],
           threshold: {
-            line: { color: "black", width: 4 },
+            line: { color: "red", width: 4 },
             thickness: 0.75
           }
         }
       }
     ];
     
-    var layout = { width: 500, height: 450, margin: { t: 0, b: 0 }, 
-    // line: {
-    //   color: "black" 
-    //   width: 3}
+    var layout = { width: 525, height: 450, margin: { t: 0, b: 0, l:1 }, 
     };
       Plotly.newPlot('gauge', data, layout);
   });
 }
-
 
 init();
 
