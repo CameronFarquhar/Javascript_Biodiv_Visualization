@@ -137,31 +137,66 @@ function gaugePlot(id){
     var wFreq = data.metadata.filter(data => data.id.toString() === id)[0].wfreq;
     console.log(wFreq);
 
+    // var data = [
+    //   {
+    //     type: "indicator",
+    //     value: wFreq,
+    //     // delta: { reference: 10 },
+    //     gauge: { axis: { visible: true, range: [0, 10] } },
+    //     domain: { row: 0, column: 0}
+    //   }]
+    
+    //   var layout = {
+    //     width: 800,
+    //     height: 400,
+    //     // margin: { t: 100, b: 80},
+    //     grid: { rows: 1, columns: 2, pattern: "independent" },
+    //     template: {
+    //       data: {
+    //         indicator: [
+    //           {
+    //             title: { text: "Scrubs Per Week" },
+    //             mode: "number+delta+gauge"
+    //             // delta: { reference: 90 }
+    //           }]
+    //       }
+    //     }
+    //     // paper_bgcolor: "lavender",
+    //     // font: { color: "darkblue", family: "Arial" }
+    //   };
+
     var data = [
       {
-        type: "indicator",
+        domain: { x: [0, 1], y: [0, 1] },
         value: wFreq,
-        // delta: { reference: 10 },
-        gauge: { axis: { visible: true, range: [0, 10] } },
-        domain: { row: 0, column: 0}
-      }]
-    
-      var layout = {
-        width: 800,
-        height: 400,
-        // margin: { t: 100, b: 80},
-        grid: { rows: 1, columns: 2, pattern: "independent" },
-        template: {
-          data: {
-            indicator: [
-              {
-                title: { text: "Scrubs Per Week" },
-                mode: "number+delta+gauge"
-                // delta: { reference: 90 }
-              }]
+        title: { text: "Scrubs Per Week"},
+        type: "indicator",
+        mode: "gauge+number",
+        // delta: { reference: 380 },
+        gauge: {
+          axis: { range: [null, 10] },
+          steps: [
+            { range: [0, 1], color: "darkred"},
+            { range: [1, 2], color: "red" },
+            { range: [2, 3], color: "orange" },
+            { range: [3, 4], color: "yellow" },
+            { range: [4, 5], color: "lightgreen" },
+            { range: [5, 6], color: "green" },
+            { range: [6, 7], color: "lightblue" },
+            { range: [7, 8], color: "blue" },
+            { range: [8, 9], color: "darkblue" },
+            { range: [9, 10], color: "black" }
+          ],
+          threshold: {
+            line: { color: "black", width: 4 },
+            thickness: 0.75
+            // value: 490
           }
         }
-      };
+      }
+    ];
+    
+    var layout = { width: 500, height: 450, margin: { t: 0, b: 0 } };
       Plotly.newPlot('gauge', data, layout);
   });
 }
