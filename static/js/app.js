@@ -176,27 +176,30 @@ function gaugePlot(id){
         gauge: {
           axis: { range: [null, 10] },
           steps: [
-            { range: [0, 1], color: "darkred"},
-            { range: [1, 2], color: "red" },
-            { range: [2, 3], color: "orange" },
-            { range: [3, 4], color: "yellow" },
-            { range: [4, 5], color: "lightgreen" },
-            { range: [5, 6], color: "green" },
-            { range: [6, 7], color: "lightblue" },
-            { range: [7, 8], color: "blue" },
-            { range: [8, 9], color: "darkblue" },
-            { range: [9, 10], color: "black" }
+            { range: [0, 1], color: "rgba(0, 150, 50, 0.1)"},
+            { range: [1, 2], color: "rgba(0, 150, 50, 0.2)d" },
+            { range: [2, 3], color: "rgba(0, 150, 50, 0.3)" },
+            { range: [3, 4], color: "rgba(0, 150, 50, 0.4)" },
+            { range: [4, 5], color: "rgba(0, 150, 50, 0.5)" },
+            { range: [5, 6], color: "rgba(0, 150, 50, 0.6)" },
+            { range: [6, 7], color: "rgba(0, 150, 50, 0.7)" },
+            { range: [7, 8], color: "rgba(0, 150, 50, 0.8)" },
+            { range: [8, 9], color: "rgba(0, 150, 50, 0.9)" },
+            { range: [9, 10], color: "rgba(0, 150, 50, 1)" }
           ],
           threshold: {
             line: { color: "black", width: 4 },
             thickness: 0.75
-            // value: 490
           }
         }
       }
     ];
     
-    var layout = { width: 500, height: 450, margin: { t: 0, b: 0 } };
+    var layout = { width: 500, height: 450, margin: { t: 0, b: 0 }, 
+    // line: {
+    //   color: "black" 
+    //   width: 3}
+    };
       Plotly.newPlot('gauge', data, layout);
   });
 }
