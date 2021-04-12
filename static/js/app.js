@@ -1,22 +1,23 @@
-
-function optionChanged(id){
-  buildPlot(id);
-  demographics(id);
-};
-
 function init() {
   d3.json("static/js/samples.json").then((data)=> {
-      // loop through names object and grab all the ids and eppend them to demographics dropdown
+      // loop through names object and grab all the ids/names and eppend them to demographics dropdown
       data.names.forEach((name) => {
           d3.select("#selDataset")
           .append("option")
           .text(name)
           .property("value");
       });
-      // apply the ids to the other functions
+      // apply an ID for the intial plot
       buildPlot(data.names[0]);
       demographics(data.names[0]);
+      gaugePlot(data.names[0]);
   });
+};
+
+function optionChanged(id){
+  buildPlot(id);
+  demographics(id);
+  gaugePlot(id);
 };
 
 function demographics(id){
@@ -49,7 +50,7 @@ function buildPlot(id) {
     // filter the sample object by id
   var filteredSample = data.samples.filter(sample => sample.id === id)[0];
   console.log(filteredSample)
-
+  
 // assign variables to each of the 3 fields
   var sampleValues = filteredSample.sample_values;
 
@@ -68,13 +69,12 @@ function buildPlot(id) {
 
   var sampleID = IDslice.reverse();
 
-  // create a list to hold ID names and and OTU in front
+  // create a list to hold ID names and add OTU in front
   const name = []
 
   sampleID.forEach(element => {
     name.push(` OTU_ID: ${element}`);
   });
-
 
   // Bar Chart
   var trace1 = {
@@ -91,12 +91,14 @@ function buildPlot(id) {
   // Apply the group bar mode to the layout
   var layout = {
     title: "Top 10 samples",
-    margin: {
-      l: 100,
-      r: 100,
-      t: 100,
-      b: 100
-    }
+    height: 600,
+    width: 500
+    // margin: {
+    //   l: 100,
+    //   r: 100,
+    //   t: 100,
+    //   b: 100
+    // }
   };
 
   // Render the plot to the div tag with id "plot"
@@ -125,7 +127,45 @@ var layout = {
 };
 
 Plotly.newPlot('bubble', data, layout);
+
 });}
+
+function gaugePlot(id){
+  d3.json("static/js/samples.json").then(function(data) {
+
+
+    var wFreq = data.metadata.filter(data => data.id.toString() === id)[0].wfreq;
+    console.log(wFreq);
+
+    var data = [
+      {
+        type: "indicator",
+        value: wFreq,
+        // delta: { reference: 10 },
+        gauge: { axis: { visible: true, range: [0, 10] } },
+        domain: { row: 0, column: 0}
+      }]
+    
+      var layout = {
+        width: 800,
+        height: 400,
+        // margin: { t: 100, b: 80},
+        grid: { rows: 1, columns: 2, pattern: "independent" },
+        template: {
+          data: {
+            indicator: [
+              {
+                title: { text: "Scrubs Per Week" },
+                mode: "number+delta+gauge"
+                // delta: { reference: 90 }
+              }]
+          }
+        }
+      };
+      Plotly.newPlot('gauge', data, layout);
+  });
+}
+
 
 init();
 
