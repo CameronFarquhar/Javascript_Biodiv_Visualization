@@ -73,7 +73,7 @@ function buildPlot(id) {
   const name = []
 
   sampleID.forEach(element => {
-    name.push(` OTU_ID: ${element}`);
+    name.push(`OTU_ID: ${element}`);
   });
 
   // Bar Chart
@@ -91,8 +91,10 @@ function buildPlot(id) {
   // Apply the group bar mode to the layout
   var layout = {
     title: "Top 10 samples",
+    yaxis: {automargin: true},
     height: 600,
-    width: 500
+    width: 500,
+    margin: {r:100}
   };
 
   // Render the plot to the div tag with id "plot"
@@ -129,9 +131,11 @@ function gaugePlot(id){
   d3.json("static/js/samples.json").then(function(data) {
 
     // find the object that matches the id entered then grab the list with [0] and identify the value of the key with wfreq.
-    
+
     var wFreq = data.metadata.filter(data => data.id.toString() === id)[0].wfreq;
     console.log(wFreq);
+
+      // gauge plot
 
     var data = [
       {
